@@ -22,6 +22,44 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 	public UsuarioDAOImpl() {
 		
 	}
+	
+	@Override
+	public Boolean exists(Connection connection, String correoUsuario) 
+			throws DataException {
+		
+		boolean exist = false;
+
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+
+		try {
+
+			String queryString = 
+							"SELECT u.correoUsuario, u.nombre, u.apellidos, u.telefono, u.clave, u.codDireccion " + 
+							"FROM Usuario u  " +
+							"WHERE u.correoUsuario = ?";
+
+
+			preparedStatement = connection.prepareStatement(queryString);
+
+			int i = 1;
+			preparedStatement.setString(i++, correoUsuario);
+
+			resultSet = preparedStatement.executeQuery();
+
+			if (resultSet.next()) {
+				exist = true;
+			}
+
+		} catch (SQLException e) {
+			throw new DataException(e);
+		} finally {
+			JDBCUtils.closeResultSet(resultSet);
+			JDBCUtils.closeStatement(preparedStatement);
+		}
+
+		return exist;
+	}
 
 	@Override
 	public Usuario create(Connection connection, Usuario u) 
@@ -31,8 +69,8 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 		ResultSet resultSet = null;
 		try {          
 
-			if (exists(u.getCorreoUsuario())) {
-				throw new DuplicateInstanceException(u.getApellidos(), Usuario.class);
+			if (exists(connection, u.getCorreoUsuario())) {
+				throw new DuplicateInstanceException(u.getApellidos(), Usuario.class.getName());
 			}
 			
 			

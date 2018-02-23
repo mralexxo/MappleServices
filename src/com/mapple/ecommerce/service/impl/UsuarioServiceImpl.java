@@ -22,6 +22,26 @@ public class UsuarioServiceImpl implements UsuarioService {
 			dao = new UsuarioDAOImpl();
 		}
 			
+		
+		public Boolean exists(String correoUsuario) 
+				throws DataException {
+					
+			Connection connection = null;
+			
+			try {
+				
+				connection = ConnectionManager.getConnection();
+				connection.setAutoCommit(true);
+				
+				return dao.exists(connection, correoUsuario);
+				
+			} catch (SQLException e){
+				throw new DataException(e);
+			} finally {
+				JDBCUtils.closeConnection(connection);
+			}
+			
+		}
 
 		public Usuario create(Usuario u) 
 				throws DuplicateInstanceException, DataException {

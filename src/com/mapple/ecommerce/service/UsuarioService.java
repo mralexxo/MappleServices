@@ -8,6 +8,9 @@ import com.mapple.ecommerce.exceptions.InstanceNotFoundException;
 import com.mapple.ecommerce.model.Usuario;
 
 public interface UsuarioService {
+	
+	public Boolean exists(String correoUsuario) 
+			throws DataException;
      
      public Usuario create(Usuario u) 
      		throws DuplicateInstanceException, DataException;
