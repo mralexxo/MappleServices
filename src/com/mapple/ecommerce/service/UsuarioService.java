@@ -11,6 +11,9 @@ public interface UsuarioService {
 	
 	public Boolean exists(String correoUsuario) 
 			throws DataException;
+	
+	public Usuario findById(String correoUsuario) 
+			throws InstanceNotFoundException, DataException;
      
      public Usuario create(Usuario u) 
      		throws DuplicateInstanceException, DataException;

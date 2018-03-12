@@ -19,8 +19,10 @@ import com.mapple.ecommerce.model.Usuario;
 
 public class UsuarioDAOImpl implements UsuarioDAO {
 
+
+	
 	public UsuarioDAOImpl() {
-		
+
 	}
 	
 	@Override
@@ -35,7 +37,7 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 		try {
 
 			String queryString = 
-							"SELECT u.correoUsuario, u.nombre, u.apellidos, u.telefono, u.clave, u.codDireccion " + 
+							"SELECT u.correoUsuario, u.nombre, u.apellidos, u.telefono, u.clave " + 
 							"FROM Usuario u  " +
 							"WHERE u.correoUsuario = ?";
 
@@ -60,6 +62,50 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 
 		return exist;
 	}
+	
+	@Override
+	public Usuario findById(Connection connection, String correoUsuario) 
+			throws InstanceNotFoundException, DataException {
+
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+
+		try {          
+
+			String queryString = 
+							"SELECT u.correoUsuario, u.nombre, u.apellidos, u.telefono, u.clave " + 
+							"FROM Usuario u  " +
+							"WHERE u.correoUsuario = ?";
+
+
+			preparedStatement = connection.prepareStatement(queryString,
+					ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+
+			int i = 1;                
+			preparedStatement.setString(i++, correoUsuario);
+
+			// Execute query            
+			resultSet = preparedStatement.executeQuery();
+
+			Usuario e = null;
+
+			if (resultSet.next()) {
+				e = loadNext(connection, resultSet);				
+			} else {
+				throw new InstanceNotFoundException("Usuarios with id " + correoUsuario + 
+						"not found", Usuario.class.getName());
+			}
+
+			return e;
+
+		} catch (SQLException e) {
+			throw new DataException(e);
+		} finally {            
+			JDBCUtils.closeResultSet(resultSet);
+			JDBCUtils.closeStatement(preparedStatement);
+		}  
+	}
+	
 
 	@Override
 	public Usuario create(Connection connection, Usuario u) 
@@ -74,8 +120,8 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 			}
 			
 			
-			String queryString = "INSERT INTO Usuario(correoUsuario, nombre, apellidos, telefono, clave, codDireccion)"
-					+ "VALUES (?, ?, ?, ?, ?, ?)";
+			String queryString = "INSERT INTO Usuario(correoUsuario, nombre, apellidos, telefono, clave)"
+					+ "VALUES (?, ?, ?, ?, ?)";
 
 			preparedStatement = connection.prepareStatement(queryString /*, Statement.RETURN_GENERATED_KEYS*/);
 
@@ -85,7 +131,7 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 			preparedStatement.setString(i++, u.getApellidos());
 			preparedStatement.setInt(i++, u.getTelefono());
 			preparedStatement.setString(i++, u.getClave());
-			preparedStatement.setInt(i++, u.getCodDireccion());
+
 
 
 			int insertedRows = preparedStatement.executeUpdate();
@@ -94,7 +140,7 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 				throw new SQLException("Can not add row to table 'Usuario'");
 			} 
 
-			resultSet = preparedStatement.getGeneratedKeys();
+//			resultSet = preparedStatement.getGeneratedKeys();
 //			if (resultSet.next()) {
 //				String pk = resultSet.getString(1); 
 //				u.setCorreoUsuario(pk);
@@ -121,7 +167,7 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 
 			String queryString = 
 					"UPDATE Usuario " +
-					"SET correoUsuario = ? ,  nombre = ?, apellidos = ?, telefono = ? , clave = ?, codDireccion = ? " +
+					"SET correoUsuario = ? ,  nombre = ?, apellidos = ?, telefono = ? , clave = ?" +
 					"WHERE correoUsuario = ? ";
 
 			preparedStatement = connection.prepareStatement(queryString);
@@ -132,7 +178,8 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 			preparedStatement.setString(i++, u.getApellidos());
 			preparedStatement.setInt(i++, u.getTelefono());
 			preparedStatement.setString(i++, u.getClave());
-			preparedStatement.setInt(i++, u.getCodDireccion());
+			preparedStatement.setString(i++, u.getCorreoUsuario());
+
 
 			int updatedRows = preparedStatement.executeUpdate();
 
@@ -163,7 +210,6 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 		String apellidos = resultSet.getString(i++);
 		Integer telefono = resultSet.getInt(i++);	
 		String clave = resultSet.getString(i++);	
-		Integer codDireccion = resultSet.getInt(i++);	
 
 		
 		Usuario e = new Usuario();		
@@ -172,7 +218,7 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 		e.setApellidos(apellidos);
 		e.setTelefono(telefono);
 		e.setClave(clave);
-		e.setCodDireccion(codDireccion);
+		
 
 		return e;
 	}

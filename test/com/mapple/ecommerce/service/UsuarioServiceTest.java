@@ -1,11 +1,17 @@
 package com.mapple.ecommerce.service;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.mapple.ecommerce.model.Usuario;
 import com.mapple.ecommerce.service.impl.UsuarioServiceImpl;
+import com.mapple.ecommerce.util.PasswordEncryptionUtil;
 import com.mapple.ecommerce.util.ToStringUtil;
 
 public class UsuarioServiceTest {
 
+	private static Logger logger = LogManager.getLogger(UsuarioServiceTest.class.getName());
+	
 	private UsuarioService usuarioService = null;
 	
 	public UsuarioServiceTest() {
@@ -13,47 +19,64 @@ public class UsuarioServiceTest {
 	}
 	
 	protected void testExists() {
-		System.out.println("Testing exists ...");
+		logger.info("Testing exists ...");
 
 		String correoUsuario =  "amr@gmail.com";
 		
 		try {			
 			Boolean exists = usuarioService.exists(correoUsuario);			
-			System.out.println("Exists: "+correoUsuario+" -> "+exists);
+			logger.info("Exists: "+correoUsuario+" -> "+exists);
 			
 		} catch (Throwable t) {
 			t.printStackTrace();
 		}
 		
-		System.out.println("Test exists finished.\n");		
+		logger.info("Test exists finished.\n");		
 	}
 	
+	
+	protected void testFindById() {
+		logger.info("Testing findById ...");
+		
+		String correoUsuario = "amr@gmail.com";
+		
+		try {			
+			Usuario u = usuarioService.findById(correoUsuario);			
+			logger.info("Found: "+ToStringUtil.toString(u));
+			
+		} catch (Throwable t) {
+			t.printStackTrace();
+		}
+		
+		logger.info("Test testFindById finished.\n");		
+	}
+	
+	
 	protected void testCreate() {		
-		System.out.println("Testing create ...");	
+		logger.info("Testing create ...");	
 		
 		Usuario usuario = new Usuario();
-		usuario.setCorreoUsuario("hld@gmail.com");
-		usuario.setNombre("Hekto");
-		usuario.setApellidos("Doval Ledo");
-		usuario.setTelefono(638512450);
-		usuario.setClave("abc123");
-		usuario.setCodDireccion(12);
+		usuario.setCorreoUsuario("atv@gmail.com");
+		usuario.setNombre("Alberto");
+		usuario.setApellidos("Taboada Varela");
+		usuario.setTelefono(695264135);
+		usuario.setClave(PasswordEncryptionUtil.encryptPassword("abc123"));
 
 		try {
 			
 			usuario = usuarioService.create(usuario);
 			
-			System.out.println("Created: "+ToStringUtil.toString(usuario));
+			logger.info("Created: "+ToStringUtil.toString(usuario));
 					
 		} catch (Throwable t) {
 			t.printStackTrace();
 		}
-		System.out.println("Test created finished.\n");		
+		logger.info("Test created finished.\n");		
 	}
 	
 	
 	protected void testUpdate() {		
-		System.out.println("Testing update ...");	
+		logger.info("Testing update ...");	
 		
 		try {
 			Usuario usuario = usuarioService.findById("hld@gmail.com");
@@ -61,17 +84,19 @@ public class UsuarioServiceTest {
 			usuario.setNombre("Hector");
 			usuario.setApellidos("Ledo Doval");
 			usuario.setTelefono(612345678);
-			usuario.setClave("gzonemola");
+			usuario.setClave("abc123");
+		
 
 
 			usuarioService.update(usuario);
 						
-			System.out.println("Updated to: "+usuarioUpdate.getUsuario());
+			usuario = usuarioService.findById("hld@gmail.com");
+			logger.info("Updated to: "+usuario);
 								
 		} catch (Throwable t) {
 			t.printStackTrace();
 		}
-		System.out.println("Test update finished.\n");		
+		logger.info("Test update finished.\n");		
 	}	
 	
 	
@@ -79,8 +104,9 @@ public class UsuarioServiceTest {
 	public static void main(String args[]) {
 		UsuarioServiceTest test = new UsuarioServiceTest();
 		test.testExists();
-		test.testCreate();
-		test.testUpdate();
+		test.testFindById();
+		//test.testCreate();
+		//test.testUpdate();
 
 	}
 }

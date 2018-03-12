@@ -1,8 +1,5 @@
 package com.mapple.ecommerce.model;
 
-
-import java.util.List;
-
 public class Usuario {
 	
 	private String correoUsuario = null;
@@ -10,9 +7,7 @@ public class Usuario {
 	private String apellidos =null;
 	private Integer telefono = null;
 	private String clave = null;
-	private Integer codDireccion = null;
-	
-	private List<Usuario> usuarios = null;
+
 
 	public String getCorreoUsuario() {
 		return correoUsuario;
@@ -54,22 +49,5 @@ public class Usuario {
 		this.clave = clave;
 	}
 
-	public Integer getCodDireccion() {
-		return codDireccion;
-	}
-
-	public void setCodDireccion(Integer codDireccion) {
-		this.codDireccion = codDireccion;
-	}
-
-	public List<Usuario> getUsuarios() {
-		return usuarios;
-	}
-
-	public void setUsuarios(List<Usuario> usuarios) {
-		this.usuarios = usuarios;
-	}
-
-	
 
 }

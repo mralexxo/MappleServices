@@ -4,26 +4,51 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
-import com.mapple.ecommerce.dao.UsuarioDAO;
-import com.mapple.ecommerce.dao.impl.UsuarioDAOImpl;
+import com.mapple.ecommerce.dao.LineaPedidoDAO;
+import com.mapple.ecommerce.dao.impl.LineaPedidoDAOImpl;
 import com.mapple.ecommerce.dao.util.ConnectionManager;
 import com.mapple.ecommerce.dao.util.JDBCUtils;
 import com.mapple.ecommerce.exceptions.DataException;
 import com.mapple.ecommerce.exceptions.DuplicateInstanceException;
 import com.mapple.ecommerce.exceptions.InstanceNotFoundException;
-import com.mapple.ecommerce.model.Usuario;
-import com.mapple.ecommerce.service.UsuarioService;
+import com.mapple.ecommerce.model.LineaPedido;
+import com.mapple.ecommerce.service.LineaPedidoService;
 
-public class UsuarioServiceImpl implements UsuarioService {
+public class LineaPedidoServiceImpl implements LineaPedidoService{
 	
-	private UsuarioDAO dao = null;
+	private LineaPedidoDAO dao = null;
 		
-		public UsuarioServiceImpl() {
-			dao = new UsuarioDAOImpl();
+		public LineaPedidoServiceImpl() {
+			dao = new LineaPedidoDAOImpl();
 		}
-			
 		
-		public Boolean exists(String correoUsuario) 
+		public LineaPedido findById(Long codLineaPedido) 
+				throws InstanceNotFoundException, DataException {
+					
+			Connection connection = null;
+			
+			try {
+				
+				connection = ConnectionManager.getConnection();
+				connection.setAutoCommit(true);
+				
+				return dao.findById(connection, codLineaPedido );	
+				
+			} catch (SQLException e){
+				throw new DataException(e);
+			} finally {
+				if (connection != null) {
+					try {
+						connection.close();
+					} catch (SQLException e) {
+						throw new DataException(e);
+					}
+				}
+			}
+			
+		}
+
+		public Boolean exists(Long codLineaPedido) 
 				throws DataException {
 					
 			Connection connection = null;
@@ -33,19 +58,28 @@ public class UsuarioServiceImpl implements UsuarioService {
 				connection = ConnectionManager.getConnection();
 				connection.setAutoCommit(true);
 				
-				return dao.exists(connection, correoUsuario);
+				return dao.exists(connection, codLineaPedido);
 				
 			} catch (SQLException e){
 				throw new DataException(e);
 			} finally {
-				JDBCUtils.closeConnection(connection);
+				if (connection != null) {
+					try {
+						connection.close();
+					} catch (SQLException e) {
+						throw new DataException(e);
+					}
+				}
 			}
 			
 		}
+
+	
+
 		
-		public Usuario findById(String correoUsuario) 
-				throws InstanceNotFoundException, DataException {
-					
+		public List<LineaPedido> findByPedido(int startIndex, int pageSize, Long codPedido) 
+				throws DataException {
+			
 			Connection connection = null;
 			
 			try {
@@ -53,23 +87,30 @@ public class UsuarioServiceImpl implements UsuarioService {
 				connection = ConnectionManager.getConnection();
 				connection.setAutoCommit(true);
 				
-				return dao.findById(connection, correoUsuario);	
+				return dao.findByPedido(connection, startIndex, pageSize, codPedido);
 				
 			} catch (SQLException e){
 				throw new DataException(e);
 			} finally {
-				JDBCUtils.closeConnection(connection);
+				if (connection != null) {
+					try {
+						connection.close();
+					} catch (SQLException e) {
+						throw new DataException(e);
+					}
+				}
 			}
-			
 		}
-
-		public Usuario create(Usuario u) 
+		
+		
+		public LineaPedido create(LineaPedido lp) 
 				throws DuplicateInstanceException, DataException {
 			
 		    Connection connection = null;
 	        boolean commit = false;
 
 	        try {
+
 	          
 	            connection = ConnectionManager.getConnection();
 
@@ -78,20 +119,22 @@ public class UsuarioServiceImpl implements UsuarioService {
 
 	            connection.setAutoCommit(false);
 
-	            Usuario result = dao.create(connection, u);
+	            // Execute action
+	            LineaPedido result = dao.create(connection, lp);
 	            commit = true;
 	            
 	            return result;
 
 	        } catch (SQLException e) {
 	            throw new DataException(e);
-
 	        } finally {
 	        	JDBCUtils.closeConnection(connection, commit);
 	        }		
 		}
 
-		public void update(Usuario u) 
+		
+
+		public long delete(Long codLineaPedido) 
 				throws InstanceNotFoundException, DataException {
 			
 		    Connection connection = null;
@@ -106,15 +149,19 @@ public class UsuarioServiceImpl implements UsuarioService {
 
 	            connection.setAutoCommit(false);
 
-	            dao.update(connection, u);
-	            commit = true;
+	            // Execute action
+	            long result = dao.delete(connection, codLineaPedido);            
+	            commit = true;            
+	            return result;
 	            
 	        } catch (SQLException e) {
 	            throw new DataException(e);
-
 	        } finally {
 	        	JDBCUtils.closeConnection(connection, commit);
-	        }
+	        }		
 		}
 
-}
+		
+
+
+	}
