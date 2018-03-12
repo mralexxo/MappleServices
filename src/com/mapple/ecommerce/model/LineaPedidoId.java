@@ -2,25 +2,22 @@ package com.mapple.ecommerce.model;
 
 public class LineaPedidoId {
 	
-	private Long idPedido;
-	private Long idProducto;
+	private Long codPedido;
+	private Long codProducto;
 	
-	public LineaPedidoId() {
+	
+	public Long getCodPedido() {
+		return codPedido;
 	}
-
-	public Long getIdTicket() {
-		return idPedido;
+	public void setCodPedido(Long codPedido) {
+		this.codPedido = codPedido;
 	}
-
-	public void setIdPedido(Long idPedido) {
-		this.idPedido = idPedido;
+	public Long getCodProducto() {
+		return codProducto;
 	}
-
-	public Long getIdProducto() {
-		return idProducto;
+	public void setCodProducto(Long codProducto) {
+		this.codProducto = codProducto;
 	}
-
-	public void setIdProducto(Long idProducto) {
-		this.idProducto = idProducto;
-	}
+	
+	
 }

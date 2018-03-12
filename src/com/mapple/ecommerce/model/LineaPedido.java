@@ -1,25 +1,15 @@
 package com.mapple.ecommerce.model;
 
 public class LineaPedido {
-	
-	private Long codLineaPedido = null;
+
+	private LineaPedidoId id = null;
 	private Double precioUnidad = (Double) null;
 	private Integer cantidad = null;
-	private Long codPedido = null;
-	private Long codProducto = null;
+	
+	
 
 	public LineaPedido () {
 		
-	}
-
-	
-	public Long getCodLineaPedido() {
-		return codLineaPedido;
-	}
-
-
-	public void setCodLineaPedido(Long codLineaPedido) {
-		this.codLineaPedido = codLineaPedido;
 	}
 
 
@@ -43,23 +33,15 @@ public class LineaPedido {
 	}
 
 
-	public Long getCodPedido() {
-		return codPedido;
+
+	public LineaPedidoId getId() {
+		return id;
 	}
 
 
-	public void setCodPedido(Long codPedido) {
-		this.codPedido = codPedido;
-	}
 
-
-	public Long getCodProducto() {
-		return codProducto;
-	}
-
-
-	public void setCodProducto(Long codProducto) {
-		this.codProducto = codProducto;
+	public void setId(LineaPedidoId id) {
+		this.id = id;
 	}
 
 

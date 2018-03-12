@@ -14,6 +14,7 @@ import com.mapple.ecommerce.exceptions.DataException;
 import com.mapple.ecommerce.exceptions.DuplicateInstanceException;
 import com.mapple.ecommerce.exceptions.InstanceNotFoundException;
 import com.mapple.ecommerce.model.LineaPedido;
+import com.mapple.ecommerce.model.LineaPedidoId;
 
 
 public class LineaPedidoDAOImpl implements LineaPedidoDAO{
@@ -23,7 +24,7 @@ public LineaPedidoDAOImpl() {
 }
 	
 	@Override
-	public LineaPedido findById(Connection connection, Long codLineaPedido) 
+	public LineaPedido findById(Connection connection, LineaPedidoId id) 
 			throws InstanceNotFoundException, DataException {
 
 		PreparedStatement preparedStatement = null;
@@ -31,15 +32,16 @@ public LineaPedidoDAOImpl() {
 
 		try {          
 			String queryString = 
-					"SELECT codLineaPedido, precioUnidad, cantidad, codPedido, codProducto " + 
+					"SELECT precioUnidad, cantidad, codPedido, codProducto " + 
 							"FROM LineaPedido " +
-							"WHERE codLineaPedido = ? ";
+							"WHERE codPedido = ? AND codProducto = ? ";
 			
 			preparedStatement = connection.prepareStatement(queryString,
 					ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 
 			int i = 1;                
-			preparedStatement.setLong(i++, codLineaPedido);
+			preparedStatement.setLong(i++, id.getCodPedido());
+			preparedStatement.setLong(i++, id.getCodProducto());
 
 			resultSet = preparedStatement.executeQuery();
 
@@ -62,10 +64,11 @@ public LineaPedidoDAOImpl() {
 	}
 	
 	@Override
-	public Boolean exists(Connection connection, Long codLineaPedido) 
+	public Boolean exists(Connection connection, LineaPedidoId id) 
 			throws DataException {
 		
 		boolean exist = false;
+
 
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
@@ -73,14 +76,15 @@ public LineaPedidoDAOImpl() {
 		try {
 
 			String queryString = 
-					"SELECT codLineaPedido, precioUnidad, cantidad, codPedido, codProducto " + 
+					"SELECT  precioUnidad, cantidad, codPedido, codProducto " + 
 							"FROM LineaPedido " +
-							"WHERE codLineaPedido = ? ";
+							"WHERE codPedido = ? AND codProducto = ? ";
 
 			preparedStatement = connection.prepareStatement(queryString);
 			
 			int i = 1;
-			preparedStatement.setLong(i++, codLineaPedido);
+			preparedStatement.setLong(i++, id.getCodPedido());
+			preparedStatement.setLong(i++, id.getCodProducto());
 
 			resultSet = preparedStatement.executeQuery();
 
@@ -106,10 +110,11 @@ public LineaPedidoDAOImpl() {
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
 
+
 		try {
 
 			String queryString = 
-					"SELECT p.CodPedido, lp.codLineaPedido, lp.precioUnidad, lp.cantidad, lp.codProducto " + 
+					"SELECT p.CodPedido, lp.precioUnidad, lp.cantidad, lp.codProducto " + 
 					"FROM LineaPedido lp " +
 					"INNER JOIN Pedido p "+
 					"ON p.codPedido = lp.codPedido " + 
@@ -120,7 +125,6 @@ public LineaPedidoDAOImpl() {
 
 			int i = 1;                
 			preparedStatement.setLong(i++, codPedido);
-
 			// Execute query            
 			resultSet = preparedStatement.executeQuery();
 			
@@ -147,7 +151,8 @@ public LineaPedidoDAOImpl() {
 		}
 	}
 
-	
+
+
 
 	@Override
 	public LineaPedido create(Connection connection, LineaPedido lp) 
@@ -155,23 +160,24 @@ public LineaPedidoDAOImpl() {
 
 		PreparedStatement preparedStatement = null;
 		
+		LineaPedidoId id = lp.getId();
+		
 		try {          
 			
-			if (exists(connection, lp.getCodLineaPedido())) {
-				throw new DuplicateInstanceException(lp.getCodLineaPedido(), LineaPedido.class.getName());
+			if (exists(connection, id)) {
+				throw new DuplicateInstanceException(id, LineaPedido.class.getName());
 			}
 
-			String queryString = "INSERT INTO LineaPedido (codLineaPedido, precioUnidad, cantidad, codPedido, codProducto) "
-								+"VALUES (?, ?, ?, ?, ?) ";
+			String queryString = "INSERT INTO LineaPedido ( precioUnidad, cantidad, codPedido, codProducto) "
+								+"VALUES ( ?, ?, ?, ?) ";
 
 			preparedStatement = connection.prepareStatement(queryString, Statement.RETURN_GENERATED_KEYS);
 			
 			int i = 1;     
-			preparedStatement.setLong(i++, lp.getCodLineaPedido());
 			preparedStatement.setDouble(i++, lp.getPrecioUnidad());
-			preparedStatement.setLong(i++, lp.getCantidad());
-			preparedStatement.setLong(i++, lp.getCodPedido());
-			preparedStatement.setLong(i++, lp.getCodProducto());
+			preparedStatement.setInt(i++, lp.getCantidad());
+			preparedStatement.setLong(i++, id.getCodPedido());
+			preparedStatement.setLong(i++, id.getCodProducto());
 
 
 			
@@ -192,7 +198,7 @@ public LineaPedidoDAOImpl() {
 
 
 	@Override
-	public long delete(Connection connection, Long codLineaPedido) 
+	public long delete(Connection connection, LineaPedidoId id) 
 			throws InstanceNotFoundException, DataException {
 		PreparedStatement preparedStatement = null;
 
@@ -200,19 +206,20 @@ public LineaPedidoDAOImpl() {
 
 			String queryString =	
 					  "DELETE FROM LineaPedido " 
-					+ "WHERE codLineaPedido = ? ";
+					+ "WHERE codPedido = ? AND codProducto = ? ";
 			
 			preparedStatement = connection.prepareStatement(queryString);
 
 			int i = 1;
-			preparedStatement.setLong(i++, codLineaPedido);
+			preparedStatement.setLong(i++, id.getCodPedido());
+			preparedStatement.setLong(i++, id.getCodProducto());
 
 			int removedRows = preparedStatement.executeUpdate();
 
 			if (removedRows == 0) {
-				throw new InstanceNotFoundException(codLineaPedido, LineaPedido.class.getName());
+				throw new InstanceNotFoundException(id, LineaPedido.class.getName());
 			} 
-					
+
 			return removedRows;
 
 		} catch (SQLException e) {
@@ -227,19 +234,19 @@ public LineaPedidoDAOImpl() {
 		throws SQLException, DataException {
 
 			int i = 1;
-			Long codlineaPedido = resultSet.getLong(i++);	
 			Double precioUnidad = resultSet.getDouble(i++);
 			Integer cantidad = resultSet.getInt(i++);	                
 			Long codPedido = resultSet.getLong(i++);	                
 			Long codProducto = resultSet.getLong(i++);	                
                 
+			
+			LineaPedidoId id = new LineaPedidoId();
 	
 			LineaPedido lp = new LineaPedido();		
-			lp.setCodLineaPedido(codlineaPedido);
 			lp.setPrecioUnidad(precioUnidad);
 			lp.setCantidad(cantidad);
-			lp.setCodPedido(codPedido);
-			lp.setCodProducto(codProducto);
+			id.setCodPedido(codPedido);
+			id.setCodProducto(codProducto);
 			
 			return lp;
 		}

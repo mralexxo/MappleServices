@@ -7,13 +7,14 @@ import com.mapple.ecommerce.exceptions.DataException;
 import com.mapple.ecommerce.exceptions.DuplicateInstanceException;
 import com.mapple.ecommerce.exceptions.InstanceNotFoundException;
 import com.mapple.ecommerce.model.LineaPedido;
+import com.mapple.ecommerce.model.LineaPedidoId;
 
 public interface LineaPedidoDAO {
 	
-	public LineaPedido findById(Connection connection, Long codLineaPedido) 
+	public LineaPedido findById(Connection connection, LineaPedidoId id) 
         	throws DataException;
 	
-	public Boolean exists(Connection connection, Long codLineaPedido) 
+	public Boolean exists(Connection connection, LineaPedidoId id) 
     		throws DataException;
 	    
     public List<LineaPedido> findByPedido(Connection connection, int startIndex, int pageSize, Long codPedido) 
@@ -22,7 +23,7 @@ public interface LineaPedidoDAO {
     public LineaPedido create(Connection connection, LineaPedido lp) 
     		throws DuplicateInstanceException, DataException;
         
-    public long delete(Connection connection, Long codLineaPedido) 
+    public long delete(Connection connection, LineaPedidoId id) 
     		throws InstanceNotFoundException, DataException;
 
 }

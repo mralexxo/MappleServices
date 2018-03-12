@@ -109,7 +109,7 @@ public PedidoDAOImpl() {
 		try {
 
 			String queryString = 
-					"SELECT u.correoUsuario, p.codPedido, p.fecha, p.importeTotal, p.correoUsuario " + 
+					"SELECT p.codPedido, p.fecha, p.importeTotal, p.correoUsuario " + 
 					"FROM Pedido p " +
 					"INNER JOIN Usuario u "+
 					"ON p.correoUsuario = u.correoUsuario " + 
@@ -168,7 +168,7 @@ public PedidoDAOImpl() {
 			
 			int i = 1;     
 			preparedStatement.setLong(i++, p.getCodPedido());
-			preparedStatement.setDate(i++, (java.sql.Date) p.getFecha());
+			preparedStatement.setDate(i++, new java.sql.Date(p.getFecha().getTime()));
 			preparedStatement.setDouble(i++, p.getImporteTotal());
 			preparedStatement.setString(i++, p.getCorreoUsuario());
 

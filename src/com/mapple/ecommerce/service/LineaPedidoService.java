@@ -7,13 +7,14 @@ import javax.management.InstanceNotFoundException;
 import com.mapple.ecommerce.exceptions.DataException;
 import com.mapple.ecommerce.exceptions.DuplicateInstanceException;
 import com.mapple.ecommerce.model.LineaPedido;
+import com.mapple.ecommerce.model.LineaPedidoId;
 
 public interface LineaPedidoService {
 	
-	public LineaPedido findById(Long codLineaPedido) 
+	public LineaPedido findById(LineaPedidoId id) 
 			throws InstanceNotFoundException, DataException;
     
-    public Boolean exists(Long codLineaPedido) 
+    public Boolean exists(LineaPedidoId id) 
     		throws DataException;        
      
      public List<LineaPedido> findByPedido(int startIndex, int pageSize, Long codPedido)
@@ -22,7 +23,7 @@ public interface LineaPedidoService {
      public LineaPedido create(LineaPedido lp) 
      		throws DuplicateInstanceException, DataException;
          
-     public long delete(Long codLineaPedido) 
+     public long delete(LineaPedidoId id) 
      		throws InstanceNotFoundException, DataException;
 	
 }

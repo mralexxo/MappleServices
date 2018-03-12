@@ -6,6 +6,9 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+
+import com.mapple.ecommerce.model.LineaPedido;
+import com.mapple.ecommerce.model.LineaPedidoId;
 import com.mapple.ecommerce.model.Pedido;
 import com.mapple.ecommerce.service.impl.PedidoServiceImpl;
 import com.mapple.ecommerce.util.ToStringUtil;
@@ -14,10 +17,10 @@ public class PedidoServiceTest {
 	
 	private static Logger logger = LogManager.getLogger(PedidoServiceTest.class.getName());
 	
-	private PedidoService PedidoService = null;
+	private PedidoService pedidoService = null;
 	
 	public PedidoServiceTest() {
-		PedidoService = new PedidoServiceImpl();
+		pedidoService = new PedidoServiceImpl();
 	}
 	
 	protected void testFindById() {
@@ -26,7 +29,7 @@ public class PedidoServiceTest {
 		Long id = 1L;
 		
 		try {			
-			Pedido p = PedidoService.findById(id);			
+			Pedido p = pedidoService.findById(id);			
 			logger.info("Found: "+ToStringUtil.toString(p));
 			
 		} catch (Throwable t) {
@@ -41,7 +44,7 @@ public class PedidoServiceTest {
 				Long id = 6L;
 		
 		try {			
-			Boolean exists = PedidoService.exists(id);			
+			Boolean exists = pedidoService.exists(id);			
 			logger.info("Exists: "+id+" -> "+exists);
 			
 		} catch (Throwable t) {
@@ -66,7 +69,7 @@ public class PedidoServiceTest {
 			int total = 0;
 			
 			do {
-				results = PedidoService.findByUsuario(startIndex, pageSize, correoUsuario);
+				results = pedidoService.findByUsuario(startIndex, pageSize, correoUsuario);
 				if (results.size()>0) {
 					logger.info("Page ["+startIndex+" - "+(startIndex+results.size()-1)+"] : ");				
 					for (Pedido p: results) {
@@ -97,14 +100,30 @@ public class PedidoServiceTest {
 
 		
 		try {
-		Pedido p = new Pedido();
-		p.setCodPedido(25L);
-		p.setFecha(localDate);
-		p.setImporteTotal(12500.00);
-		p.setCorreoUsuario("hld@gmail.com");
+			
+				Pedido p = new Pedido();
+				p.setCodPedido(22L);
+				p.setFecha(localDate);
+				p.setImporteTotal(900.00);
+				p.setCorreoUsuario("hld@gmail.com");
+				
+				LineaPedidoId id = new LineaPedidoId();
+				id.setCodPedido(p.getCodPedido());
+				id.setCodProducto(1L);
+			
+				LineaPedido linea = new LineaPedido();
+				linea.setPrecioUnidad(450.00);
+				linea.setCantidad(2);
+				linea.setId(id);
+								
+				
+				
+				
+				
+				
 	
 			
-			p = PedidoService.create(p);
+			p = pedidoService.create(p);
 			
 			logger.info("Created: "+ToStringUtil.toString(p));
 					
