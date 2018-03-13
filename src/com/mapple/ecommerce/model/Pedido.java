@@ -1,6 +1,9 @@
 package com.mapple.ecommerce.model;
 
 import java.util.Date;
+import java.util.List;
+
+import com.mapple.ecommerce.model.LineaPedido;
 
 public class Pedido {
 	
@@ -12,6 +15,9 @@ public class Pedido {
 	public Pedido() {
 		
 	}
+	
+	private List<LineaPedido> lineas = null;
+
 	
 	
 	public Long getCodPedido() {
@@ -37,6 +43,14 @@ public class Pedido {
 	}
 	public void setCorreoUsuario(String correoUsuario) {
 		this.correoUsuario = correoUsuario;
+	}
+	
+	public List<LineaPedido> getLineas() {
+		return lineas;
+	}
+
+	public void setLineas(List<LineaPedido> lineas) {
+		this.lineas = lineas;
 	}
 	
 	

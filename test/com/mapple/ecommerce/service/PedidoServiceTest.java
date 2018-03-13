@@ -26,7 +26,7 @@ public class PedidoServiceTest {
 	protected void testFindById() {
 		logger.info("Testing findById ...");
 		
-		Long id = 1L;
+		Long id = 3L;
 		
 		try {			
 			Pedido p = pedidoService.findById(id);			
@@ -102,26 +102,18 @@ public class PedidoServiceTest {
 		try {
 			
 				Pedido p = new Pedido();
-				p.setCodPedido(22L);
 				p.setFecha(localDate);
 				p.setImporteTotal(900.00);
 				p.setCorreoUsuario("hld@gmail.com");
 				
-				LineaPedidoId id = new LineaPedidoId();
-				id.setCodPedido(p.getCodPedido());
+				LineaPedidoId id = new LineaPedidoId();				
 				id.setCodProducto(1L);
 			
 				LineaPedido linea = new LineaPedido();
+				linea.setId(id);
 				linea.setPrecioUnidad(450.00);
 				linea.setCantidad(2);
-				linea.setId(id);
-								
 				
-				
-				
-				
-				
-	
 			
 			p = pedidoService.create(p);
 			
