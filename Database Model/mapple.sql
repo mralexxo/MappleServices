@@ -102,7 +102,7 @@ ENGINE = InnoDB;
 -- Table `Mapple`.`Pedido`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `Mapple`.`Pedido` (
-  `codPedido` INT NOT NULL,
+  `codPedido` INT NOT NULL AUTO_INCREMENT,
   `fecha` DATE NOT NULL,
   `importeTotal` VARCHAR(45) NOT NULL,
   `correoUsuario` VARCHAR(50) NOT NULL,
