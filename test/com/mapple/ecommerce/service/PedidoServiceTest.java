@@ -26,7 +26,7 @@ public class PedidoServiceTest {
 	protected void testFindById() {
 		logger.info("Testing findById ...");
 		
-		Long id = 3L;
+		Long id = 8L;
 		
 		try {			
 			Pedido p = pedidoService.findById(id);			
@@ -114,6 +114,8 @@ public class PedidoServiceTest {
 				linea.setPrecioUnidad(450.00);
 				linea.setCantidad(2);
 				
+				p.getLineas().add(linea);
+				
 			
 			p = pedidoService.create(p);
 			
@@ -130,10 +132,10 @@ public class PedidoServiceTest {
 	
 	public static void main(String args[]) {
 		PedidoServiceTest test = new PedidoServiceTest();
-		test.testFindById();	
+		test.testFindById();+	
 		test.testExists();
 		test.testFindByUsuario();
-		test.testCreate();
+	//	test.testCreate();
 	}
 
 }

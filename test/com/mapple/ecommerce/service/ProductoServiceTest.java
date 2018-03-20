@@ -20,7 +20,7 @@ public class ProductoServiceTest {
 	public ProductoServiceTest() {
 		productoService = new ProductoServiceImpl();
 	}
-	
+	 
 	
 	protected void testFindById() {
 		logger.info("Testing findById ...");
@@ -48,7 +48,11 @@ public class ProductoServiceTest {
 		int pageSize = 12;
 		
 		ProductoCriteria p = new ProductoCriteria();
-		p.setCodCategoria(4L);;
+		//p.setCodCategoria(1L);
+		p.setNombre("phone");
+		p.setPrecioDesde(1.0);
+		p.setPrecioHasta(100000.0);
+
 		try {
 
 			List<Producto> results = null;
@@ -56,7 +60,7 @@ public class ProductoServiceTest {
 			int total = 0;
 			
 			do {
-				results = productoService.findByCriteria(p, startIndex, pageSize,"EN");
+				results = productoService.findByCriteria(p, startIndex, pageSize,"ES");
 				if (results.size()>0) {
 					logger.info("Page ["+startIndex+" - "+(startIndex+results.size()-1)+"] : ");				
 					for (Producto t: results) {
