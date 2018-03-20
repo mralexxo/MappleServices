@@ -83,7 +83,7 @@ public class ProductoServiceTest {
 	
 	public static void main(String args[]) {
 		ProductoServiceTest test = new ProductoServiceTest();
-		test.testFindById();
+//		test.testFindById();
 		test.testFindByCriteria();
 
 		
