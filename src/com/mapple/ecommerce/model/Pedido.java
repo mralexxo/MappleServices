@@ -1,9 +1,8 @@
 package com.mapple.ecommerce.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import com.mapple.ecommerce.model.LineaPedido;
 
 public class Pedido {
 	
@@ -12,11 +11,15 @@ public class Pedido {
 	private Double importeTotal = (Double) null;
 	private String correoUsuario = null;
 	
+	private List<LineaPedido> lineas = null;
+
+	
 	public Pedido() {
+		
+		lineas = new ArrayList<LineaPedido>();
 		
 	}
 	
-	private List<LineaPedido> lineas = null;
 
 	
 	

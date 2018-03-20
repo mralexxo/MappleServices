@@ -12,6 +12,7 @@ import com.mapple.ecommerce.exceptions.DataException;
 import com.mapple.ecommerce.exceptions.DuplicateInstanceException;
 import com.mapple.ecommerce.exceptions.InstanceNotFoundException;
 import com.mapple.ecommerce.model.LineaPedido;
+import com.mapple.ecommerce.model.LineaPedidoId;
 import com.mapple.ecommerce.service.LineaPedidoService;
 
 public class LineaPedidoServiceImpl implements LineaPedidoService{
@@ -22,7 +23,7 @@ public class LineaPedidoServiceImpl implements LineaPedidoService{
 			dao = new LineaPedidoDAOImpl();
 		}
 		
-		public LineaPedido findById(Long codLineaPedido) 
+		public LineaPedido findById(LineaPedidoId id) 
 				throws InstanceNotFoundException, DataException {
 					
 			Connection connection = null;
@@ -32,7 +33,7 @@ public class LineaPedidoServiceImpl implements LineaPedidoService{
 				connection = ConnectionManager.getConnection();
 				connection.setAutoCommit(true);
 				
-				return dao.findById(connection, codLineaPedido );	
+				return dao.findById(connection, id );	
 				
 			} catch (SQLException e){
 				throw new DataException(e);
@@ -48,7 +49,7 @@ public class LineaPedidoServiceImpl implements LineaPedidoService{
 			
 		}
 
-		public Boolean exists(Long codLineaPedido) 
+		public Boolean exists(LineaPedidoId id) 
 				throws DataException {
 					
 			Connection connection = null;
@@ -58,7 +59,7 @@ public class LineaPedidoServiceImpl implements LineaPedidoService{
 				connection = ConnectionManager.getConnection();
 				connection.setAutoCommit(true);
 				
-				return dao.exists(connection, codLineaPedido);
+				return dao.exists(connection, id);
 				
 			} catch (SQLException e){
 				throw new DataException(e);
@@ -134,7 +135,7 @@ public class LineaPedidoServiceImpl implements LineaPedidoService{
 
 		
 
-		public long delete(Long codLineaPedido) 
+		public long delete(LineaPedidoId id) 
 				throws InstanceNotFoundException, DataException {
 			
 		    Connection connection = null;
@@ -150,7 +151,7 @@ public class LineaPedidoServiceImpl implements LineaPedidoService{
 	            connection.setAutoCommit(false);
 
 	            // Execute action
-	            long result = dao.delete(connection, codLineaPedido);            
+	            long result = dao.delete(connection, id);            
 	            commit = true;            
 	            return result;
 	            

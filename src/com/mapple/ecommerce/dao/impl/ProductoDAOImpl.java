@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -59,6 +60,7 @@ public class ProductoDAOImpl implements ProductoDAO {
 			return e;
 
 		} catch (SQLException e) {
+			logger.error(e);
 			throw new DataException(e);
 		} finally {
 			JDBCUtils.closeResultSet(resultSet);
@@ -89,7 +91,7 @@ public class ProductoDAOImpl implements ProductoDAO {
 			}
 
 			if (producto.getMedidaPantalla() != null) {
-				addClause(queryString, first, " p.medidaPantalla LIKE ? ");
+				addClause(queryString, first, " p.medidaPantalla LIKE ? "); // TODO
 				first = false;
 			}
 
@@ -102,12 +104,18 @@ public class ProductoDAOImpl implements ProductoDAO {
 				addClause(queryString, first, " p.precioUnitario < ? ");
 				first = false;
 			}
+			
+			if (!StringUtils.isEmpty(producto.getNombre())) {
+				addClause(queryString, first, " UPPER(pi.nombre) LIKE UPPER(?) ");
+				first = false;
+			}
 
 			if (idioma != null) {
 				addClause(queryString, first, " pi.codIdioma = ? ");
 				first = false;
 			}
 
+			logger.info("Query: "+queryString);
 			preparedStatement = connection.prepareStatement(queryString.toString(), ResultSet.TYPE_SCROLL_INSENSITIVE,
 					ResultSet.CONCUR_READ_ONLY);
 
@@ -115,6 +123,9 @@ public class ProductoDAOImpl implements ProductoDAO {
 
 			if (producto.getCodCategoria() != null)
 				preparedStatement.setLong(i++, producto.getCodCategoria());
+
+			if (!StringUtils.isEmpty(producto.getNombre()))
+				preparedStatement.setString(i++, "'%"+producto.getNombre()+"%'");
 
 			if (producto.getMedidaPantalla() != null)
 				preparedStatement.setDouble(i++, producto.getMedidaPantalla());

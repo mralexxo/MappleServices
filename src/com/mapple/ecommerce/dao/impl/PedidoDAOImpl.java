@@ -26,7 +26,7 @@ public class PedidoDAOImpl implements PedidoDAO{
 
 	
 public PedidoDAOImpl() {
-	
+	lineaPedidoDAO = new LineaPedidoDAOImpl();
 }	
 	
 	@Override
@@ -197,11 +197,11 @@ public PedidoDAOImpl() {
 			}
 			
 			List<LineaPedido> lineas = p.getLineas();
-			LineaPedidoId id = new LineaPedidoId();				
+							
 
 
 			for (LineaPedido lp: lineas) {
-				id.setCodPedido(p.getCodPedido());
+				lp.getId().setCodPedido(p.getCodPedido());
 				lineaPedidoDAO.create(connection, lp);
 			}
 			

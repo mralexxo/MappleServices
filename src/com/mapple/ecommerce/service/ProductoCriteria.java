@@ -1,6 +1,8 @@
 package com.mapple.ecommerce.service;
 
-public class ProductoCriteria {
+import com.mapple.ecommerce.model.Producto;
+
+public class ProductoCriteria extends Producto {
 	
 	private Long codCategoria = null;
 	private Double medidaPantalla = null;

@@ -14,4 +14,4 @@ public interface ProductoService {
 	    public List<Producto> findByCriteria(ProductoCriteria c, int startIndex, int count, String idioma)
 	   	    throws DataException;
 	    
-}
+} 
