@@ -90,8 +90,13 @@ public class ProductoDAOImpl implements ProductoDAO {
 				first = false;
 			}
 
+			if (!StringUtils.isEmpty(producto.getNombre())) {
+				addClause(queryString, first, " UPPER(pi.nombre) LIKE UPPER(?) ");
+				first = false;
+			}
+			
 			if (producto.getMedidaPantalla() != null) {
-				addClause(queryString, first, " p.medidaPantalla LIKE ? "); // TODO
+				addClause(queryString, first, " p.medidaPantalla = ? "); 
 				first = false;
 			}
 
@@ -105,10 +110,7 @@ public class ProductoDAOImpl implements ProductoDAO {
 				first = false;
 			}
 			
-			if (!StringUtils.isEmpty(producto.getNombre())) {
-				addClause(queryString, first, " UPPER(pi.nombre) LIKE UPPER(?) ");
-				first = false;
-			}
+
 
 			if (idioma != null) {
 				addClause(queryString, first, " pi.codIdioma = ? ");
@@ -125,7 +127,7 @@ public class ProductoDAOImpl implements ProductoDAO {
 				preparedStatement.setLong(i++, producto.getCodCategoria());
 
 			if (!StringUtils.isEmpty(producto.getNombre()))
-				preparedStatement.setString(i++, "'%"+producto.getNombre()+"%'");
+				preparedStatement.setString(i++, "%"+producto.getNombre()+"%");
 
 			if (producto.getMedidaPantalla() != null)
 				preparedStatement.setDouble(i++, producto.getMedidaPantalla());
@@ -187,7 +189,6 @@ public class ProductoDAOImpl implements ProductoDAO {
 		p.setCodCategoria(codCategoria);
 		p.setMedidaPantalla(medidaPantalla);
 		
-
 		return p;
 	}
 
