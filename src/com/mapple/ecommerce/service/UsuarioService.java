@@ -5,6 +5,7 @@ import java.util.List;
 import com.mapple.ecommerce.exceptions.DataException;
 import com.mapple.ecommerce.exceptions.DuplicateInstanceException;
 import com.mapple.ecommerce.exceptions.InstanceNotFoundException;
+import com.mapple.ecommerce.exceptions.MailException;
 import com.mapple.ecommerce.model.Usuario;
 
 public interface UsuarioService {
@@ -16,7 +17,7 @@ public interface UsuarioService {
 			throws InstanceNotFoundException, DataException;
      
      public Usuario create(Usuario u) 
-     		throws DuplicateInstanceException, DataException;
+     		throws DuplicateInstanceException, DataException, MailException;
 
      public void update(Usuario u) 
      		throws InstanceNotFoundException, DataException;

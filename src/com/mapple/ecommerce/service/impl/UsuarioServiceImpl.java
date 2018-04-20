@@ -3,11 +3,15 @@ package com.mapple.ecommerce.service.impl;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.ResourceBundle;
+
 
 import com.mapple.ecommerce.dao.UsuarioDAO;
 import com.mapple.ecommerce.dao.impl.UsuarioDAOImpl;
 import com.mapple.ecommerce.dao.util.ConnectionManager;
 import com.mapple.ecommerce.dao.util.JDBCUtils;
+import com.mapple.ecommerce.exceptions.MailException;
+import com.mapple.ecommerce.service.MailService;
 import com.mapple.ecommerce.exceptions.DataException;
 import com.mapple.ecommerce.exceptions.DuplicateInstanceException;
 import com.mapple.ecommerce.exceptions.InstanceNotFoundException;
@@ -17,6 +21,7 @@ import com.mapple.ecommerce.service.UsuarioService;
 public class UsuarioServiceImpl implements UsuarioService {
 	
 	private UsuarioDAO dao = null;
+	private static ResourceBundle dbConfiguration = ResourceBundle.getBundle("ServiceConfiguration");
 		
 		public UsuarioServiceImpl() {
 			dao = new UsuarioDAOImpl();
@@ -64,7 +69,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 		}
 
 		public Usuario create(Usuario u) 
-				throws DuplicateInstanceException, DataException {
+				throws DuplicateInstanceException, DataException, MailException {
 			
 		    Connection connection = null;
 	        boolean commit = false;
@@ -79,6 +84,8 @@ public class UsuarioServiceImpl implements UsuarioService {
 	            connection.setAutoCommit(false);
 
 	            Usuario result = dao.create(connection, u);
+	            MailService mail = new MailServiceImpl();
+	            mail.sendMail(dbConfiguration.getString("service.mail.subject"), dbConfiguration.getString("service.mail.body"), u.getCorreoUsuario());
 	            commit = true;
 	            
 	            return result;
