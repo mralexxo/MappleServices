@@ -4,7 +4,6 @@ package com.mapple.ecommerce.util;
  * Test de la utilidad de encriptación de password.
  * (Pronto descubriemos JUnit para hacer mejor los tests).
  *
- * @author https://www.linkedin.com/in/joseantoniolopezperez
  * @version 0.2
  */
 public class PasswordEntryptionUtilTest {

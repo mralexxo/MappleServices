@@ -8,7 +8,6 @@ import org.jasypt.util.password.StrongPasswordEncryptor;
  * 
  * Desacoplar siempre que sea posible de APIs de terceros.
  * 
- * @author https://www.linkedin.com/in/joseantoniolopezperez
  * @version 0.2
  */
 public class PasswordEncryptionUtil {

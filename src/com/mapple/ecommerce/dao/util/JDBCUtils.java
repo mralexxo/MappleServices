@@ -11,7 +11,6 @@ import com.mapple.ecommerce.exceptions.DataException;
  * Factoriza los bloques de código habituales de JDBC 
  * que deben colocarse en los bloques <code>finally { ... }</code>.
  *
- * @author https://www.linkedin.com/in/joseantoniolopezperez
  * @version 0.2
  */
 public final class JDBCUtils {

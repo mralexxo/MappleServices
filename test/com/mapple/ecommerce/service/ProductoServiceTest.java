@@ -49,9 +49,9 @@ public class ProductoServiceTest {
 		
 		ProductoCriteria p = new ProductoCriteria();
 		//p.setCodCategoria(1L);
-		p.setNombre("phone");
-		p.setPrecioDesde(1.0);
-		p.setPrecioHasta(100000.0);
+		p.setNombre(" ");
+//		p.setPrecioDesde(1.0);
+//		p.setPrecioHasta(100000.0);
 
 		try {
 
